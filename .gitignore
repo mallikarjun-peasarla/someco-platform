@@ -1,0 +1,6 @@
+target
+.*
+*.iml
+*.log
+pom.xml.*
+alf_data_dev/
