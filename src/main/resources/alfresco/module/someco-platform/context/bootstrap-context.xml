@@ -33,4 +33,12 @@
             </list>
         </property>
     </bean>
+
+    <bean id="someco-platform_actionResourceBundles" parent="actionResourceBundles">
+        <property name="resourceBundles">
+            <list>
+                <value>alfresco.module.${project.artifactId}.messages.somecoactions</value>
+            </list>
+        </property>
+    </bean>
 </beans>
