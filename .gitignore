@@ -2,5 +2,6 @@ target
 .*
 *.iml
 *.log
+*.log.*
 pom.xml.*
 alf_data_dev/
