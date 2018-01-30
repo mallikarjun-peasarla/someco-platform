@@ -73,6 +73,18 @@
             </properties>
         </type>
 
+        <type name="sc:hrDoc">
+            <title>Someco HR Document</title>
+            <parent>sc:doc</parent>
+        </type>
+        <type name="sc:hrPolicy">
+            <title>Someco HR Policy</title>
+            <parent>sc:hrDoc</parent>
+            <mandatory-aspects>
+              <aspect>cm:replaceable</aspect>
+            </mandatory-aspects>
+        </type>
+
     </types>
 
     <aspects>

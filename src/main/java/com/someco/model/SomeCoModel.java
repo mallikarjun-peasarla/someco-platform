@@ -6,6 +6,7 @@ public interface SomeCoModel {
     public static final String NAMESPACE_SOMECO_CONTENT_MODEL  = "http://www.someco.com/model/content/1.0";
     public static final String TYPE_SC_DOC = "doc";
     public static final String TYPE_SC_WHITEPAPER = "whitepaper";
+    public static final String TYPE_SC_HRPOLICY = "hrPolicy";
 
     // Aspects
     public static final String ASPECT_SC_WEBABLE = "webable";
