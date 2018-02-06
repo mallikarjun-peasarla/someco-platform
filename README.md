@@ -43,3 +43,11 @@ cm:webscript-test.txt | /app:company_home/cm:Someco/cm:Whitepapers | workspace:/
 cm:whitepaper test | /app:company_home/cm:Company_x0020_Home/cm:Someco/cm:Whitepapers | workspace://SpacesStore/dfb28b1a-49c5-41eb-9910-635416f37027
 
 Reason: http://localhost:8080/alfresco/service/someco/whitepapers.html gives result guest is not able to access the documents created by admin
+
+- get ratings script
+The link in http://localhost:8080/alfresco/service/someco/whitepapers.html is showing
+http://localhost:8080/alfresco/d/d/workspace/SpacesStore/dfb28b1a-49c5-41eb-9910-635416f37027/whitepaper%20test?guest=true
+
+not like (this also gave 404)
+http://localhost:8080/alfresco/s/someco/rating.html?id=43946f68-1fc6-4d54-b730-33a20633b432&guest=true
+
