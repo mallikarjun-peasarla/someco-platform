@@ -25,3 +25,21 @@ The web script descriptor says that this web script requires Guest access or hig
 .Run the web script and then authenticate with a valid user and password when the basic authentication dialog is presented.
 .Run the web script with “?guest=true” appended to the URL, like this:
 http://localhost:8080/alfresco/service/someco/whitepapers.html?guest=true
+
+result:
+http://localhost:8080/alfresco/service/someco/whitepapers.html?guest=true gives
+
+404 Description:	Requested resource is not available.
+Message:	No whitepapers found
+
+This in whitepapers.get.js is not getting results
+	var whitepapers = search.luceneSearch("PATH:\"/app:company_home/cm:Someco/*\" +TYPE:\"{http://www.someco.com/model/content/1.0}whitepaper\"");
+
+Though I can see two results for below query in node browser lucene search
+PATH:"/app:company_home/cm:Someco/*" +TYPE:"{http://www.someco.com/model/content/1.0}whitepaper"
+
+NAME | PARENT | REFERENCE
+cm:webscript-test.txt | /app:company_home/cm:Someco/cm:Whitepapers | workspace://SpacesStore/8c369781-ed0a-47ff-b0fc-e2a49335b00b
+cm:whitepaper test | /app:company_home/cm:Company_x0020_Home/cm:Someco/cm:Whitepapers | workspace://SpacesStore/dfb28b1a-49c5-41eb-9910-635416f37027
+
+Reason: http://localhost:8080/alfresco/service/someco/whitepapers.html gives result guest is not able to access the documents created by admin

@@ -2,7 +2,7 @@
 
 function main() {
 	logger.log("Inside whitepapers.get.js");
-	var whitepapers = search.luceneSearch("PATH:\"/app:company_home/cm:Someco/*\" +TYPE:\"{http://www.someco.com/model/content/1.0}whitepaper\" +@sc\\:isActive:true");
+	var whitepapers = search.luceneSearch("PATH:\"/app:company_home/cm:Someco/*\" +TYPE:\"{http://www.someco.com/model/content/1.0}whitepaper\"");
 	if (whitepapers == null || whitepapers.length == 0) {
 	    logger.log("No whitepapers found");
 	    status.code = 404;
