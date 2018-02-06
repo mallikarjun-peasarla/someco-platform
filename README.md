@@ -58,3 +58,9 @@ curl -X POST "http://localhost:8080/alfresco/s/someco/rating?id=11f2ca9f-0c92-42
 and retrieve using below from browser
 http://localhost:8080/alfresco/s/someco/rating?id=11f2ca9f-0c92-42ec-a351-8a765e675b09
 
+-delete rating with js webscript
+curl -uadmin:admin -X DELETE "http://localhost:8080/alfresco/s/someco/rating/delete.html?id=11f2ca9f-0c92-42ec-a351-8a765e675b09"
+
+and check update using below from browser
+http://localhost:8080/alfresco/s/someco/rating?id=11f2ca9f-0c92-42ec-a351-8a765e675b09
+
