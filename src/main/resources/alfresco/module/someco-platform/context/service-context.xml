@@ -72,4 +72,20 @@
             <ref bean="policyComponent" />
         </property>
     </bean>
+
+    <bean id="ratingBean" class="com.someco.beans.RatingBean">
+        <property name="nodeService">
+            <ref bean="NodeService" />
+        </property>
+    </bean>
+
+    <!-- id attribute follows naming convention - webscript.package.service-id.method -->
+    <bean id="webscript.com.someco.ratings.rating.post" class="com.someco.scripts.PostRating" parent="webscript">
+        <property name="ratingBean">
+            <ref bean="ratingBean" />
+        </property>
+        <property name="nodeService">
+            <ref bean="NodeService" />
+        </property>
+    </bean>
 </beans>

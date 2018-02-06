@@ -48,6 +48,13 @@ Reason: http://localhost:8080/alfresco/service/someco/whitepapers.html gives res
 The link in http://localhost:8080/alfresco/service/someco/whitepapers.html is showing
 http://localhost:8080/alfresco/d/d/workspace/SpacesStore/dfb28b1a-49c5-41eb-9910-635416f37027/whitepaper%20test?guest=true
 
-not like (this also gave 404)
-http://localhost:8080/alfresco/s/someco/rating.html?id=43946f68-1fc6-4d54-b730-33a20633b432&guest=true
+not like
+http://localhost:8080/alfresco/s/someco/rating.html?id=11f2ca9f-0c92-42ec-a351-8a765e675b09
+
+-post rating with java based webscript
+pass the document id for which rating is enabled
+curl -X POST "http://localhost:8080/alfresco/s/someco/rating?id=11f2ca9f-0c92-42ec-a351-8a765e675b09&rating=5&user=jpotts&guest=true"
+
+and retrieve using below from browser
+http://localhost:8080/alfresco/s/someco/rating?id=11f2ca9f-0c92-42ec-a351-8a765e675b09
 
