@@ -1,4 +1,4 @@
-<import resource="classpath:alfresco/module/behavior-tutorial-repo/scripts/rating.js">
+<import resource="classpath:alfresco/module/someco-platform/scripts/rating.js">
 var scriptFailed = false;
 
 // Have a look at the behaviour object that should have been passed
