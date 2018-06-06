@@ -10,7 +10,6 @@
     <imports>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
         <import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm" />
-        <import uri="http://www.alfresco.org/model/workflow/1.0" prefix="wf" />
     </imports>
     <!-- Introduction of new namespaces defined by this model -->
     <namespaces>
@@ -29,7 +28,7 @@
             </properties>
         </type>
         <type name="scwf:reviewTask">
-            <parent>wf:activitiReviewTask</parent>
+            <parent>bpm:activitiOutcomeTask</parent>
             <overrides>
                 <property name="bpm:packageItemActionGroup">
                     <default>read_package_item_actions</default>
