@@ -13,6 +13,7 @@
             <list>
                 <value>alfresco/module/${project.artifactId}/model/scModel.xml</value>
                 <value>alfresco/module/${project.artifactId}/model/scRatingsModel.xml</value>
+                <value>alfresco/module/${project.artifactId}/model/scWorkflowModel.xml</value>
             </list>
         </property>
         <property name="labels">
@@ -21,6 +22,7 @@
                 <value>alfresco/module/${project.artifactId}/messages/content-model</value>
                 <value>alfresco/module/${project.artifactId}/messages/somecoactions</value>
                 <value>alfresco/module/${project.artifactId}/messages/scRatingsModel</value>
+                <value>alfresco/module/${project.artifactId}/messages/scWorkflow</value>
             </list>
         </property>
     </bean>
