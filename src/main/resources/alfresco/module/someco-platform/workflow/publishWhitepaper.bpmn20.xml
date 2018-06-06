@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.someco.com/alfresco/workflows/1.0/publishWhitepaper">
+    <process id="publishWhitepaper" name="Publish Whitepaper" isExecutable="true">
+        <startEvent id="start" name="Start" activiti:formKey="scwf:submitReviewTask"></startEvent>
+        <parallelGateway id="parallelgateway1" name="Parallel Gateway"></parallelGateway>
+        <sequenceFlow id="flow1" sourceRef="start" targetRef="submit"></sequenceFlow>
+        <sequenceFlow id="flow2" sourceRef="parallelgateway1" targetRef="marketingReview"></sequenceFlow>
+        <sequenceFlow id="flow3" sourceRef="parallelgateway1" targetRef="operationReview"></sequenceFlow>
+        <parallelGateway id="parallelgateway2" name="Parallel Gateway"></parallelGateway>
+        <sequenceFlow id="flow4" sourceRef="marketingReview" targetRef="parallelgateway2"></sequenceFlow>
+        <sequenceFlow id="flow5" sourceRef="operationReview" targetRef="parallelgateway2"></sequenceFlow>
+        <endEvent id="endevent1" name="End"></endEvent>
+        <userTask id="marketingReview" name="Marketing Review" activiti:candidateGroups="GROUP_Marketing" activiti:formKey="scwf:reviewTask">
+            <extensionElements>
+                <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[if (task.getVariable('wf_reviewOutcome') == 'Approve') {
+  var newApproveCount = scwf_approveCount + 1;
+  execution.setVariable("scwf_approveCount", newApproveCount);
+}
+if (newApproveCount >= 2) { execution.setVariable("validated", true); }
+else { execution.setVariable("validated", false); }]]></activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+            </extensionElements>
+        </userTask>
+        <userTask id="operationReview" name="Operation Review" activiti:candidateGroups="GROUP_Operation" activiti:formKey="scwf:reviewTask">
+            <extensionElements>
+                <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[if (task.getVariable('wf_reviewOutcome') == 'Approve') {
+  var newApproveCount = scwf_approveCount + 1;
+  execution.setVariable("scwf_approveCount", newApproveCount);
+}
+if (newApproveCount >= 2) { execution.setVariable("validated", true); }
+else { execution.setVariable("validated", false); }]]></activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+            </extensionElements>
+        </userTask>
+        <userTask id="approved" name="Approved" activiti:assignee="${bpm_assignee.properties.userName}" activiti:formKey="wf:adhocTask">
+            <extensionElements>
+                <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[var setWebFlagAction = actions.create("set-web-flag");
+setWebFlagAction.parameters["active"] = true;
+for (var i = 0; i < bpm_package.children.length; i++) {
+  logger.log("Approving whitepaper:" + bpm_package.children[i].nodeRef);
+  setWebFlagAction.execute(bpm_package.children[i]);
+}]]></activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+            </extensionElements>
+        </userTask>
+        <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+        <sequenceFlow id="flow6" sourceRef="parallelgateway2" targetRef="exclusivegateway1"></sequenceFlow>
+        <sequenceFlow id="flow7" sourceRef="exclusivegateway1" targetRef="exclusivegateway2">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${validated}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow8" sourceRef="approved" targetRef="endevent1"></sequenceFlow>
+        <sequenceFlow id="flow9" sourceRef="exclusivegateway1" targetRef="revise">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!validated}]]></conditionExpression>
+        </sequenceFlow>
+        <userTask id="revise" name="Revise" activiti:assignee="${initiator.properties.userName}" activiti:formKey="wf:adhocTask"></userTask>
+        <sequenceFlow id="flow10" sourceRef="revise" targetRef="submit"></sequenceFlow>
+        <sequenceFlow id="flow11" sourceRef="submit" targetRef="parallelgateway1"></sequenceFlow>
+        <serviceTask id="submit" name="Submit" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+            <extensionElements>
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[logger.log("Submit whitepaper!");
+execution.setVariable("scwf_approveCount", 0);]]></activiti:string>
+                </activiti:field>
+            </extensionElements>
+        </serviceTask>
+        <receiveTask id="thirdPartyReview" name="Third Party Review">
+            <extensionElements>
+                <activiti:executionListener event="start" class="com.someco.repo.bpm.ExternalReviewNotification"></activiti:executionListener>
+            </extensionElements>
+        </receiveTask>
+        <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
+        <sequenceFlow id="flow12" sourceRef="exclusivegateway2" targetRef="thirdPartyReview">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${scwf_reviewerEmail!=""}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow13" sourceRef="exclusivegateway2" targetRef="approved">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${scwf_reviewerEmail==""}]]></conditionExpression>
+        </sequenceFlow>
+        <exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway"></exclusiveGateway>
+        <sequenceFlow id="flow14" sourceRef="thirdPartyReview" targetRef="exclusivegateway3"></sequenceFlow>
+        <sequenceFlow id="flow15" sourceRef="exclusivegateway3" targetRef="revise">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${scwf_3rdPartyOutcome == 'Reject'}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow16" sourceRef="exclusivegateway3" targetRef="approved">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${scwf_3rdPartyOutcome == 'Approve'}]]></conditionExpression>
+        </sequenceFlow>
+        <boundaryEvent id="boundarytimer1" name="Timer" attachedToRef="thirdPartyReview" cancelActivity="true">
+            <timerEventDefinition>
+                <timeDuration>PT10M</timeDuration>
+            </timerEventDefinition>
+        </boundaryEvent>
+        <sequenceFlow id="flow17" sourceRef="boundarytimer1" targetRef="approved"></sequenceFlow>
+    </process>
+</definitions>
